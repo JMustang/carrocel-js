@@ -1,23 +1,47 @@
-(() => {
-    'use strict'
+(function () {
+  "use strict";
 
-    var btnPrev = document.querySelector('.carousel__btn--prev');
-    var btnNext = document.querySelector('.carousel__btn--next');
-    var carousel = document.querySelector('.carousel');
+  //mostrar os botoes navegação e acrescentar listeners
+  var $btnPrev = document.querySelector(".carousel__btn--prev");
+  var $btnNext = document.querySelector(".carousel__btn--next");
+  var $carousel = document.querySelector(".carousel");
+  var $carouselInner = document.querySelector(".carousel__inner");
+  var $carouselItens = document.querySelectorAll(".carousel__item");
+  var bannerAtual = 0;
+  var qdtBanners = $carouselItens.length;
 
-    btnPrev.style.display = 'block';
-    btnNext.style.display = 'block';
+  $btnPrev.style.display = "block";
+  $btnNext.style.display = "block";
 
-    btnPrev.addEventListener('click', showPrev);
-    btnNext.addEventListener('click', showNext);
+  //incluir overflow hidden no .carousel
+  $carousel.style.overflowX = "hidden";
 
-    function showPrev() {
-        alert('prev');
-    }
+  $btnPrev.addEventListener("click", showPrev);
+  $btnNext.addEventListener("click", showNext);
 
-    function showNext() {
-        alert('Next');
-    }
+  function showPrev() {
+    bannerAtual--;
+    mostrarBanner(bannerAtual);
+  }
 
-    carousel.style.overflowX = 'hidden';
-})()
+  function showNext() {
+    bannerAtual++;
+    mostrarBanner(bannerAtual);
+  }
+
+  function setupNav(bannerAtual) {
+    $btnPrev.disabled = !bannerAtual > 0;
+    $btnNext.disabled = bannerAtual === qdtBanners - 1;
+  }
+
+  function mostrarBanner(bannerAtual) {
+    setupNav(bannerAtual);
+
+    var largura = getComputedStyle($carouselItens[0]).width;
+    largura = parseInt(largura);
+
+    var novaPosicao = largura * bannerAtual * -1;
+
+    $carouselInner.style.transform = "translateX(" + novaPosicao + "px)";
+  }
+})();
