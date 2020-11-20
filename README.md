@@ -1,1 +1,1 @@
-# carrocel-js
+# carosel function made with javascript.
