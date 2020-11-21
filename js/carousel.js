@@ -1,47 +1,41 @@
-(function () {
-  "use strict";
+let slidePosition = 0;
+const slides = document.getElementsByClassName("carousel__item");
+const totalSlides = slides.length;
 
-  //mostrar os botoes navegação e acrescentar listeners
-  var $btnPrev = document.querySelector(".carousel__btn--prev");
-  var $btnNext = document.querySelector(".carousel__btn--next");
-  var $carousel = document.querySelector(".carousel");
-  var $carouselInner = document.querySelector(".carousel__inner");
-  var $carouselItens = document.querySelectorAll(".carousel__item");
-  var bannerAtual = 0;
-  var qdtBanners = $carouselItens.length;
+document
+  .getElementById("carousel__button--next")
+  .addEventListener("click", function () {
+    moveToNextSlide();
+  });
 
-  $btnPrev.style.display = "block";
-  $btnNext.style.display = "block";
+document
+  .getElementById("carousel__button--prev")
+  .addEventListener("click", function () {
+    moveToPrevSlide();
+  });
 
-  //incluir overflow hidden no .carousel
-  $carousel.style.overflowX = "hidden";
-
-  $btnPrev.addEventListener("click", showPrev);
-  $btnNext.addEventListener("click", showNext);
-
-  function showPrev() {
-    bannerAtual--;
-    mostrarBanner(bannerAtual);
+function updateSlidePosition() {
+  for (let slide of slides) {
+    slide.classList.remove("carousel__item--visible");
+    slide.classList.add("carousel__item--hidden");
   }
+  slides[slidePosition].classList.add("carousel__item--visible");
+}
 
-  function showNext() {
-    bannerAtual++;
-    mostrarBanner(bannerAtual);
+function moveToNextSlide() {
+  if (slidePosition === totalSlides - 1) {
+    slidePosition = 0;
+  } else {
+    slidePosition++;
   }
+  updateSlidePosition();
+}
 
-  function setupNav(bannerAtual) {
-    $btnPrev.disabled = !bannerAtual > 0;
-    $btnNext.disabled = bannerAtual === qdtBanners - 1;
+function moveToPrevSlide() {
+  if (slidePosition === 0) {
+    slidePosition = totalSlides - 1;
+  } else {
+    slidePosition--;
   }
-
-  function mostrarBanner(bannerAtual) {
-    setupNav(bannerAtual);
-
-    var largura = getComputedStyle($carouselItens[0]).width;
-    largura = parseInt(largura);
-
-    var novaPosicao = largura * bannerAtual * -1;
-
-    $carouselInner.style.transform = "translateX(" + novaPosicao + "px)";
-  }
-})();
+  updateSlidePosition();
+}
